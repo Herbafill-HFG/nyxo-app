@@ -1,18 +1,16 @@
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import { HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT } from '@helpers/Dimensions'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 
-interface Props {
+type Props = {
   yOffset: Animated.Value<number>
   title?: string
 }
 
-const WeekViewHeader = (props: Props) => {
-  const { yOffset, title } = props
-
+const WeekViewHeader: FC<Props> = ({ yOffset, title }) => {
   const titleSize = (offset: Animated.Value<number>) => ({
     opacity: offset.interpolate({
       inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
@@ -24,11 +22,9 @@ const WeekViewHeader = (props: Props) => {
 
   return (
     <Header>
-      <GradientContainer>
-        <Gradient>
-          <WeekTitle style={titleSize(yOffset)}>{title}</WeekTitle>
-        </Gradient>
-      </GradientContainer>
+      <Gradient>
+        <WeekTitle style={titleSize(yOffset)}>{title}</WeekTitle>
+      </Gradient>
     </Header>
   )
 }
@@ -42,16 +38,8 @@ const Header = styled(Animated.View)`
   overflow: hidden;
 `
 
-const GradientContainer = styled.View`
-  position: absolute;
-  height: ${HEADER_MAX_HEIGHT}px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`
-
-const Gradient = styled(LinearGradient).attrs((props: StyleProps) => ({
-  colors: props.theme.GRADIENT
+const Gradient = styled(LinearGradient).attrs(({ theme }) => ({
+  colors: theme.GRADIENT
 }))`
   position: absolute;
   left: 0;
@@ -70,5 +58,5 @@ const WeekTitle = styled(Animated.Text)`
   bottom: 0;
   left: 20px;
   right: 20px;
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `

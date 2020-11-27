@@ -1,13 +1,13 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { FC, memo, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components/native'
 import { Formik } from 'formik'
 import { getLinkingCode } from '@selectors/linking-selectors'
 import { linkAccount, removeLink } from '@actions/linking/linking-actions'
+import { constants, fonts, StyleProps } from '@styles/themes'
 import translate from '../../config/i18n'
 import colors from '../../styles/colors'
-import { constants, fonts, StyleProps } from '../../styles/themes'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { IconBold } from '../iconRegular'
 import { H3, H5, P } from '../Primitives/Primitives'
@@ -17,34 +17,15 @@ import { CodeSchema } from '../../config/Validation'
 interface Props {
   linkCode?: string
 }
-const LinkModule = (props: Props) => {
+const LinkModule: FC<Props> = ({ linkCode: linkCodeFromParams }) => {
   const dispatch = useDispatch()
   const linkCode = useSelector(getLinkingCode)
-  const linkCodeFromParams = props.linkCode
 
   const removeCode = async () => {
     await dispatch(removeLink())
   }
 
   const confirmUnLink = () => {
-    Alert.alert(
-      translate('UNLINK_CODE_TITLE'),
-      translate('UNLINK_CODE_TEXT'),
-      [
-        {
-          text: translate('UNLINK_YES'),
-          onPress: () => removeCode()
-        },
-        {
-          text: translate('UNLINK_NO'),
-          style: 'cancel'
-        }
-      ],
-      { cancelable: false }
-    )
-  }
-
-  const newLink = () => {
     Alert.alert(
       translate('UNLINK_CODE_TITLE'),
       translate('UNLINK_CODE_TEXT'),
@@ -89,8 +70,11 @@ const LinkModule = (props: Props) => {
         <Formik
           initialValues={{ code: '' }}
           validationSchema={CodeSchema}
-          onSubmit={(values) => {
+          onSubmit={(values, { setSubmitting }) => {
             dispatch(linkAccount(values.code))
+            setTimeout(() => {
+              setSubmitting(false)
+            }, 1000)
           }}>
           {({
             handleChange,
@@ -98,7 +82,7 @@ const LinkModule = (props: Props) => {
             handleBlur,
             values,
             touched,
-            errors,
+            isSubmitting,
             isValid
           }) => (
             <InnerContainer>
@@ -108,13 +92,14 @@ const LinkModule = (props: Props) => {
                 autoCapitalize="none"
                 value={values.code}
                 onChangeText={handleChange('code')}
-                onBlur={handleBlur}
+                onBlur={handleBlur('code')}
                 placeholder={translate('LINK_CODE_PLACEHOLDER')}
               />
               <PrimaryButton
-                disabled={!isValid}
+                disabled={!isValid && !touched.code}
                 title="VALIDATE_CODE"
                 onPress={handleSubmit}
+                loading={isSubmitting}
               />
             </InnerContainer>
           )}
@@ -130,18 +115,18 @@ const Container = styled.View`
   margin: 30px 0px 60px;
 `
 
-const CodeInput = styled.TextInput.attrs((props: StyleProps) => ({
-  placeholderTextColor: props.theme.PRIMARY_TEXT_COLOR
+const CodeInput = styled.TextInput.attrs(({ theme }) => ({
+  placeholderTextColor: theme.PRIMARY_TEXT_COLOR
 }))`
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 17px;
   flex: 1;
   min-height: 50px;
   border-radius: 5px;
   padding: 10px 20px;
   margin-bottom: 20px;
-  border-color: ${(props: StyleProps) => props.theme.HAIRLINE_COLOR};
+  border-color: ${({ theme }) => theme.HAIRLINE_COLOR};
   border-width: ${constants.hairlineWidth}px;
 `
 
@@ -159,15 +144,15 @@ const LinkCodeRow = styled.View`
 
 const LinkCode = styled.Text`
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 17px;
   flex: 1;
 `
 
 const RemoveButton = styled.TouchableOpacity``
 
-const RemoveButtonIcon = styled(IconBold).attrs((props: StyleProps) => ({
-  fill: props.theme.PRIMARY_TEXT_COLOR
+const RemoveButtonIcon = styled(IconBold).attrs(({ theme }) => ({
+  fill: theme.PRIMARY_TEXT_COLOR
 }))``
 
 const CodeSuggestionContainer = styled.View`

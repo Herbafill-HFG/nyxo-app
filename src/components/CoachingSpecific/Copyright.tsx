@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 
 const Copyright = () => {
   return (
@@ -22,5 +22,5 @@ const Container = styled.View`
 const Text = styled.Text`
   font-family: ${fonts.medium};
   text-align: center;
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `

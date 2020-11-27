@@ -5,7 +5,7 @@ import {
 import EmptyState from '@components/EmptyState'
 import SourceRow from '@components/SettingsSpecific/SourceRow'
 import TranslatedText from '@components/TranslatedText'
-import React from 'react'
+import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getAllHealthKitSources,
@@ -13,16 +13,16 @@ import {
   getIsHealthKitMainSource
 } from '@selectors/sleep-source-selectors/sleep-source-selectors'
 import styled from 'styled-components/native'
-import { constants } from 'styles/themes'
+import { constants } from '@styles/themes'
 
-const HealthKitSection = () => {
+const HealthKitSection: FC = () => {
   const dispatch = useDispatch()
   const sources = useSelector(getAllHealthKitSources)
   const isHealthKitMainSource = useSelector(getIsHealthKitMainSource)
   const healthKitSource = useSelector(getHealthKitSource)
 
-  const onPress = (sourceId: any) => {
-    const source = sources?.find((source) => source.sourceId === sourceId)
+  const onPress = (sourceId: string) => {
+    const source = sources?.find((s) => s.sourceId === sourceId)
     if (source) {
       dispatch(changeHealthKitSource(source))
     }
@@ -32,17 +32,15 @@ const HealthKitSection = () => {
     dispatch(toggleHealthKit())
   }
 
-  const mapped = sources
-    ? sources.map((item, key) => (
-        <SourceRow
-          key={key}
-          sourceId={item.sourceId}
-          sourceName={item.sourceName}
-          selectedSourceId={healthKitSource?.sourceId}
-          switchSource={onPress}
-        />
-      ))
-    : []
+  const mapped = sources?.map((item) => (
+    <SourceRow
+      key={item.sourceId}
+      sourceId={item.sourceId}
+      sourceName={item.sourceName}
+      selectedSourceId={healthKitSource?.sourceId}
+      switchSource={onPress}
+    />
+  ))
 
   return (
     <Container>
@@ -54,17 +52,10 @@ const HealthKitSection = () => {
         />
       </TitleRow>
       <Description>SOURCE.HEALTH_KIT_DESCRIPTION</Description>
-      {isHealthKitMainSource && (
-        <Sources>{mapped.length != 0 ? mapped : <EmptyState />}</Sources>
-      )}
+      <SourceTitle>SOURCE.AVAILABLE_HEALTHKIT</SourceTitle>
+      {isHealthKitMainSource && <Sources>{mapped ?? <EmptyState />}</Sources>}
     </Container>
   )
-}
-
-{
-  /* <P androidTranslation="SOURCE_SELECTION.BASIS_FOR_SLEEP_DATA_ANDROID">
-SOURCE_SELECTION.BASIS_FOR_SLEEP_DATA_IOS
-</P> */
 }
 
 export default HealthKitSection
@@ -87,6 +78,13 @@ const TitleRow = styled.View`
 const Title = styled(TranslatedText)`
   font-family: ${({ theme }) => theme.FONT_BOLD};
   color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
+`
+
+const SourceTitle = styled(TranslatedText)`
+  font-family: ${({ theme }) => theme.FONT_BOLD};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
+  font-size: 15px;
+  margin: 16px 0px 8px;
 `
 
 const Switch = styled.Switch``

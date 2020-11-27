@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { toggleEditMode } from '@actions/manual-sleep/manual-sleep-actions'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components/native'
-import colors from 'styles/colors'
+import colors from '@styles/colors'
 import { IconBold } from '@components/iconRegular'
 
 const AddNightButton: FC = () => {
@@ -16,7 +16,7 @@ const AddNightButton: FC = () => {
         <IconBold
           width={20}
           height={20}
-          fill={colors.radiantBlue}
+          fill={colors.darkBlue}
           name="doubleBedAdd"
         />
       </Touchable>

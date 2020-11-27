@@ -2,8 +2,8 @@ import Analytics from 'appcenter-analytics'
 import React, { memo } from 'react'
 import { TouchableOpacity } from 'react-native'
 import styled from 'styled-components/native'
+import { constants, fonts, StyleProps } from '@styles/themes'
 import colors from '../../styles/colors'
-import { constants, fonts, StyleProps } from '../../styles/themes'
 import { IconBold } from '../iconRegular'
 
 interface Props {
@@ -39,12 +39,12 @@ const SettingRow = (props: Props) => {
 
 export default memo(SettingRow)
 
-const Container = styled.View<StyleProps>`
+const Container = styled.View`
   margin: 0px 20px;
   padding: 20px 0px;
   flex-direction: row;
   border-bottom-width: ${constants.hairlineWidth}px;
-  border-bottom-color: ${(props: StyleProps) => props.theme.HAIRLINE_COLOR};
+  border-bottom-color: ${({ theme }) => theme.HAIRLINE_COLOR};
 `
 
 const InnerContainer = styled.View`
@@ -54,8 +54,8 @@ const InnerContainer = styled.View`
   justify-content: space-between;
 `
 
-const Icon = styled(IconBold).attrs((props: StyleProps) => ({
-  fill: props.theme.PRIMARY_TEXT_COLOR
+const Icon = styled(IconBold).attrs(({ theme }) => ({
+  fill: theme.PRIMARY_TEXT_COLOR
 }))``
 
 const IconContainer = styled.View`

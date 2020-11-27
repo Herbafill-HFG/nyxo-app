@@ -3,10 +3,10 @@ import { extendMoment } from 'moment-range'
 import React, { memo } from 'react'
 import { SectionList, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import colors from '../../styles/colors'
-import { fonts } from '../../styles/themes'
+import { fonts } from '@styles/themes'
 import { getGoToSleepWindowStart } from '@selectors/insight-selectors/Insights'
-import { MicroTask } from 'Types/Microtask'
+import { MicroTask } from '@typings/Microtask'
+import colors from '../../styles/colors'
 import MicrotaskCard from '../HabitCard/HabitCard'
 
 const moment = extendMoment(Moment)
@@ -121,7 +121,7 @@ export const Timeline = () => {
           borderTopColor: colors.gray2,
           borderTopWidth: StyleSheet.hairlineWidth,
           flexDirection: 'row'
-          // backgroundColor: colors.radiantBlueTransparent,
+          // backgroundColor: colors.darkBlueTransparent,
         }}>
         <View
           style={{
@@ -149,7 +149,7 @@ export const Timeline = () => {
     <View
       key={index}
       style={{
-        // backgroundColor: colors.radiantBlueTransparent,
+        // backgroundColor: colors.darkBlueTransparent,
         marginTop: -20,
         flexDirection: 'row',
         paddingVertical: 10,

@@ -1,18 +1,21 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import styled from 'styled-components/native'
-import { StyleProps } from '../../styles/themes'
-import IconBold from '../iconBold'
+import { IconBold } from '../iconRegular'
 
 interface Props {
   route?: string
 }
 
-const GoBack = ({ route }: Props) => {
+const GoBack: FC<Props> = ({ route }) => {
   const navigation = useNavigation()
 
   const handlePress = () => {
-    route ? navigation.navigate(route, {}) : navigation.goBack()
+    if (route) {
+      navigation.navigate(route, {})
+    } else {
+      navigation.goBack()
+    }
   }
 
   return (
@@ -34,13 +37,12 @@ export const Spacer = styled.View`
   flex: 2;
 `
 
-const Icon = styled(IconBold).attrs((props: StyleProps) => ({
-  fill: props.theme.PRIMARY_TEXT_COLOR
+const Icon = styled(IconBold).attrs(({ theme }) => ({
+  fill: theme.PRIMARY_TEXT_COLOR
 }))``
 
 const Background = styled.View`
-  background-color: ${(props: StyleProps) =>
-    props.theme.PRIMARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR};
   padding: 20px;
   justify-content: center;
   align-items: center;
@@ -48,7 +50,7 @@ const Background = styled.View`
   overflow: hidden;
   max-width: 40px;
   max-height: 40px;
-  box-shadow: ${(props: StyleProps) => props.theme.SHADOW};
+  box-shadow: ${({ theme }) => theme.SHADOW};
 `
 
 export const GoBackContainer = styled.View`

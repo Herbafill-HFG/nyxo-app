@@ -1,14 +1,11 @@
-import { BlurView } from 'expo-blur'
+import { toggleRatingModal } from '@actions/modal/modal-actions'
+import { getRatingModal } from '@selectors/ModalSelectors'
+import { getIsDarkMode } from '@selectors/UserSelectors'
 import React, { memo } from 'react'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components/native'
-import { toggleRatingModal } from '@actions/modal/modal-actions'
-import { getRatingModal } from '@selectors/ModalSelectors'
-import { getSelectedDayRating } from '@selectors/SleepDataSelectors'
-import { getIsDarkMode } from '@selectors/UserSelectors'
 import colors from '../styles/colors'
-import { StyleProps } from '../styles/themes'
 import RatingButton from './Buttons/RatingButton'
 import { H3, P } from './Primitives/Primitives'
 
@@ -43,14 +40,13 @@ const RatingModal = () => {
   const dispatch = useDispatch()
   const isVisible = useSelector(getRatingModal)
   const darkMode = useSelector(getIsDarkMode)
-  const selected = useSelector(getSelectedDayRating)
 
   const buttons = info.map((item) => (
     <RatingButton
       key={item.value}
       icon={item.icon}
       value={item.value}
-      selected={selected === item.value}
+      selected={item.value === 3} // FIXME
       color={item.color}
       title={item.title}
     />
@@ -74,14 +70,12 @@ const RatingModal = () => {
       onSwipeComplete={closeModal}
       swipeDirection="down"
       onBackdropPress={toggleModal}>
-      <BlurView tint={darkMode ? 'dark' : 'light'} intensity={100}>
-        <Container>
-          <Mark />
-          <H3 center>HOW_WOULD_YOU_RATE</H3>
-          <ButtonContainer>{buttons}</ButtonContainer>
-          <P>WHY_RATE</P>
-        </Container>
-      </BlurView>
+      <Container>
+        <Mark />
+        <H3 center>HOW_WOULD_YOU_RATE</H3>
+        <ButtonContainer>{buttons}</ButtonContainer>
+        <P>WHY_RATE</P>
+      </Container>
     </StyledModal>
   )
 }
@@ -98,8 +92,8 @@ const StyledModal = styled(Modal)`
   justify-content: flex-end;
 `
 
-const Mark = styled.View<StyleProps>`
-  background-color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+const Mark = styled.View`
+  background-color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
   height: 5px;
   width: 100px;
   border-radius: 5px;
@@ -113,10 +107,9 @@ const ButtonContainer = styled.View`
   margin: 30px 0px;
 `
 
-const Container = styled.View<StyleProps>`
+const Container = styled.View`
   border-radius: 30px;
-  /* background-color: ${(props: StyleProps) =>
-    props.theme.SECONDARY_BACKGROUND_COLOR}; */
+  background-color: ${({ theme }) => theme.SECONDARY_BACKGROUND_COLOR};
   justify-content: space-between;
   padding: 10px 20px;
 `

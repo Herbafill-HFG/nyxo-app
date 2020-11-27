@@ -2,50 +2,80 @@ import {
   getGoToSleepWindowEnd,
   getGoToSleepWindowStart
 } from '@selectors/insight-selectors/Insights'
-import { getSelectedDay } from '@selectors/SleepDataSelectors'
 import { IconBold } from '@components/iconRegular'
 import { Column } from '@components/Primitives/Primitives'
 import TranslatedText from '@components/TranslatedText'
-import { getFormattedDateOrPlaceholder } from 'helpers/time'
-import React, { FC } from 'react'
+import {
+  getFormattedDateOrPlaceholder,
+  minutesToHoursString
+} from '@helpers/time'
+import React, { FC, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components/native'
-import colors from 'styles/colors'
-import { WIDTH } from 'helpers/Dimensions'
+import colors from '@styles/colors'
+import { WIDTH } from '@helpers/Dimensions'
+import useSleep from '@hooks/useSleep'
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewToken
+} from 'react-native'
+import { ThemeColors } from 'react-navigation'
 
 const pageWidth = WIDTH - 16 * 2 - 2 * 16
 
 const InsightsCard: FC = () => {
-  const { bedStart, bedEnd, sleepStart, sleepEnd } = useSelector(getSelectedDay)
+  const {
+    bedStart,
+    bedEnd,
+    sleepStart,
+    sleepEnd,
+    efficiency,
+    inBedDuration,
+    asleepDuration
+  } = useSleep()
   const goToSleepWindowStart = useSelector(getGoToSleepWindowStart)
   const goToSleepWindowEnd = useSelector(getGoToSleepWindowEnd)
-
   const wentToBed = getFormattedDateOrPlaceholder(bedStart, 'H:mm')
   const gotUp = getFormattedDateOrPlaceholder(bedEnd, 'H:mm')
-
   const fellAsleep = getFormattedDateOrPlaceholder(sleepStart, 'H:mm')
   const wokeUp = getFormattedDateOrPlaceholder(sleepEnd, 'H:mm')
-
   const windowStart = getFormattedDateOrPlaceholder(
     goToSleepWindowStart,
     'H:mm'
   )
   const windowEnd = getFormattedDateOrPlaceholder(goToSleepWindowEnd, 'H:mm')
+  const [page, setPage] = useState(0)
+
+  const handleScroll = ({
+    nativeEvent
+  }: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (nativeEvent.contentOffset.x > nativeEvent.contentSize.width / 3) {
+      setPage(1)
+    } else {
+      setPage(0)
+    }
+  }
 
   return (
     <Container>
       <Title>STAT.STATISTICS</Title>
 
-      <ScrollView horizontal pagingEnabled>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        scrollEventThrottle={30}
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}>
         <Page>
           <Row>
             <Figure>
               <Icon
                 fill="none"
                 name="nightMoonBegin"
-                height="30"
-                width="30"
-                stroke={colors.inBedColor}
+                height="20"
+                width="20"
+                stroke={colors.darkBlue}
               />
               <Column>
                 <Value>{wentToBed}</Value>
@@ -57,9 +87,9 @@ const InsightsCard: FC = () => {
               <Icon
                 fill="none"
                 name="nightMoonEnd"
-                height="30"
-                width="30"
-                stroke={colors.inBedColor}
+                height="20"
+                width="20"
+                stroke={colors.darkBlue}
               />
               <Column>
                 <Value>{gotUp}</Value>
@@ -73,8 +103,8 @@ const InsightsCard: FC = () => {
               <Icon
                 fill="none"
                 name="nightMoonEnd"
-                height="30"
-                width="30"
+                height="20"
+                width="20"
                 stroke={colors.asleepColor}
               />
               <Column>
@@ -87,8 +117,8 @@ const InsightsCard: FC = () => {
               <Icon
                 fill="none"
                 name="nightMoonEnd"
-                height="30"
-                width="30"
+                height="20"
+                width="20"
                 stroke={colors.asleepColor}
               />
               <Column>
@@ -103,14 +133,14 @@ const InsightsCard: FC = () => {
             <Figure>
               <Icon
                 fill="none"
-                name="nightMoonBegin"
-                height="30"
-                width="30"
+                name="doubleBed"
+                height="20"
+                width="20"
                 stroke="black"
               />
               <Column>
-                <Value>{wentToBed}</Value>
-                <Description>STAT.WENT_TO_BED</Description>
+                <Value>{minutesToHoursString(inBedDuration)}</Value>
+                <Description>STAT.BED</Description>
               </Column>
             </Figure>
 
@@ -118,13 +148,13 @@ const InsightsCard: FC = () => {
               <Icon
                 fill="none"
                 name="nightMoonEnd"
-                height="30"
-                width="30"
+                height="20"
+                width="20"
                 stroke="black"
               />
               <Column>
-                <Value>{wokeUp}</Value>
-                <Description>STAT.WOKE_UP</Description>
+                <Value>{efficiency}</Value>
+                <Description>STAT.EFFICIENCY</Description>
               </Column>
             </Figure>
           </Row>
@@ -133,14 +163,14 @@ const InsightsCard: FC = () => {
             <Figure>
               <Icon
                 fill="none"
-                name="nightMoonEnd"
-                height="30"
-                width="30"
+                name="doubleBed"
+                height="20"
+                width="20"
                 stroke="black"
               />
               <Column>
-                <Value>4:00</Value>
-                <Description>STAT.WOKE_UP</Description>
+                <Value>{minutesToHoursString(asleepDuration)}</Value>
+                <Description>STAT.SLEEP</Description>
               </Column>
             </Figure>
 
@@ -148,8 +178,8 @@ const InsightsCard: FC = () => {
               <Icon
                 fill="none"
                 name="bedWindow"
-                height="30"
-                width="30"
+                height="20"
+                width="20"
                 stroke={colors.bedTimeColor}
               />
               <Column>
@@ -162,7 +192,10 @@ const InsightsCard: FC = () => {
           </Row>
         </Page>
       </ScrollView>
-      {/* <Paging></Paging> */}
+      <Paging>
+        <Dot selected={page === 0} />
+        <Dot selected={page === 1} />
+      </Paging>
     </Container>
   )
 }
@@ -206,7 +239,7 @@ const Figure = styled.View`
   align-items: center;
   flex: 1;
   width: 100%;
-  margin-right: 30px;
+  margin-right: 20px;
 `
 
 const Icon = styled(IconBold).attrs(() => ({}))`
@@ -216,11 +249,30 @@ const Icon = styled(IconBold).attrs(() => ({}))`
 const Value = styled.Text`
   color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${({ theme }) => theme.FONT_MEDIUM};
-  font-size: 20px;
+  font-size: 15px;
 `
 
 const Description = styled(TranslatedText)`
   color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
   font-family: ${({ theme }) => theme.FONT_REGULAR};
   font-size: 13px;
+`
+
+const Paging = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`
+
+type DotProps = {
+  selected: boolean
+}
+const Dot = styled.View<DotProps>`
+  height: 5px;
+  width: 5px;
+  border-radius: 10px;
+  background-color: ${({ selected, theme }) =>
+    selected ? theme.accent : theme.HAIRLINE_COLOR};
+  margin: 0px 5px;
 `

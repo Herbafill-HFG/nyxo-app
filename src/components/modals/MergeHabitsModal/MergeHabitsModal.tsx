@@ -3,7 +3,7 @@ import {
   handleHabitsFromCloudWhenLoggingIn,
   toggleMergingDialog
 } from '@actions/habit/habit-actions'
-import { WIDTH } from 'helpers/Dimensions'
+import { WIDTH } from '@helpers/Dimensions'
 import React, { memo, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,7 +11,7 @@ import { getAuthState } from '@selectors/auth-selectors/auth-selectors'
 import { getMergingDialogDisplayed } from '@selectors/habit-selectors/habit-selectors'
 import { getUsername } from '@selectors/UserSelectors'
 import styled from 'styled-components/native'
-import ROUTE from 'config/routes/Routes'
+import ROUTE from '@config/routes/Routes'
 import TranslatedText from '@components/TranslatedText'
 import translate from '../../../config/i18n'
 import { fonts, StyleProps } from '../../../styles/themes'
@@ -89,12 +89,11 @@ const DialogContainer = styled.View`
   border-radius: 15px;
   width: ${WIDTH * 0.9}px;
   padding: 20px;
-  background-color: ${(props: StyleProps) =>
-    props.theme.SECONDARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.SECONDARY_BACKGROUND_COLOR};
 `
 
 const Description = styled(TranslatedText)`
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 15px;
   font-family: ${fonts.medium};
 `
@@ -114,13 +113,13 @@ const Button = styled.TouchableOpacity`
 `
 
 const AgreeText = styled(TranslatedText)`
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 15px;
   font-family: ${fonts.medium};
 `
 
 const DisagreeText = styled(TranslatedText)`
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
   font-size: 15px;
   font-family: ${fonts.medium};
 `

@@ -1,5 +1,7 @@
 import Amplify from '@aws-amplify/core'
+import { getTheme } from '@selectors/UserSelectors'
 import * as Sentry from '@sentry/react-native'
+import { State } from '@typings/State'
 import * as Analytics from 'appcenter-analytics'
 import React from 'react'
 import { addEventListener, removeEventListener } from 'react-native-localize'
@@ -7,15 +9,13 @@ import Purchases from 'react-native-purchases'
 import { enableScreens } from 'react-native-screens'
 import SplashScreen from 'react-native-splash-screen'
 import { connect } from 'react-redux'
+import { DefaultTheme } from 'styled-components'
 import { ThemeProvider } from 'styled-components/native'
-import { sendError } from '@actions/notifications'
 import amplify from './config/Amplify'
 import AppWithNavigationState from './config/AppNavigation'
 import CONFIG from './config/Config'
 import { setI18nConfig } from './config/i18n'
-import { getTheme } from './store/Selectors/UserSelectors'
-import { darkTheme, lightTheme, ThemeProps } from './styles/themes'
-import { State } from './Types/State'
+import { darkTheme, lightTheme } from './styles/themes'
 
 if (!__DEV__) {
   Sentry.init({
@@ -27,8 +27,7 @@ enableScreens()
 Amplify.configure(amplify)
 
 interface AppProps {
-  sendError: (error: any) => void
-  theme: ThemeProps
+  theme: DefaultTheme
 }
 
 class App extends React.Component<AppProps> {
@@ -75,4 +74,4 @@ const mapStateToProps = (state: State) => ({
   theme: getTheme(state)
 })
 
-export default connect(mapStateToProps, { sendError })(App)
+export default connect(mapStateToProps)(App)

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import { StyleProps } from '../../styles/themes'
+import { StyleProps } from '@styles/themes'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { H3, P } from '../Primitives/Primitives'
 
@@ -25,8 +25,7 @@ const RefreshCoaching = (props: Props) => {
 export default RefreshCoaching
 
 const Card = styled.View`
-  background-color: ${(props: StyleProps) =>
-    props.theme.SECONDARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.SECONDARY_BACKGROUND_COLOR};
   width: 250px;
   padding: 20px;
   border-radius: 5px;

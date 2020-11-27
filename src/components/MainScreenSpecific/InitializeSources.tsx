@@ -2,9 +2,9 @@ import { P } from '@components/Primitives/Primitives'
 import TranslatedText from '@components/TranslatedText'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
-import colors from 'styles/colors'
+import colors from '@styles/colors'
 import { useNavigation } from '@react-navigation/core'
-import ROUTE from 'config/routes/Routes'
+import ROUTE from '@config/routes/Routes'
 import { IconBold } from '@components/iconRegular'
 import { useSelector, useDispatch } from 'react-redux'
 import { getDataOnboardingCompleted } from '@selectors/OnboardingSelectors'
@@ -16,7 +16,11 @@ const InitializeSource: FC = () => {
   const onboardingCompleted = useSelector(getDataOnboardingCompleted)
 
   const handlePress = () => {
-    navigate(ROUTE.SETTINGS, { screen: ROUTE.SOURCE_SETTINGS })
+    navigate(ROUTE.APP, {
+      screen: ROUTE.SETTINGS,
+      params: { screen: ROUTE.SOURCE_SETTINGS }
+    })
+
     dispatch(markDataOnboardingCompleted())
   }
 
@@ -31,7 +35,7 @@ const InitializeSource: FC = () => {
         <Button onPress={handlePress}>
           <ButtonText>START.BUTTON</ButtonText>
           <Icon
-            fill={colors.radiantBlue}
+            fill={colors.darkBlue}
             height="20"
             width="20"
             name="arrowCircleRight"
@@ -72,7 +76,7 @@ const Button = styled.TouchableOpacity`
 `
 
 const ButtonText = styled(TranslatedText)`
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
   font-family: ${({ theme }) => theme.FONT_BOLD};
   font-size: 15px;
 `

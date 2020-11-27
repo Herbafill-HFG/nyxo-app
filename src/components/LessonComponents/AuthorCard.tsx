@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import FastImage from 'react-native-fast-image'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 
 interface AuthorCardProps {
   avatarURL: string
@@ -40,7 +40,7 @@ const Avatar = styled(FastImage)`
 const Name = styled.Text`
   font-size: 12px;
   font-family: ${fonts.bold};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `
 
 const Container = styled.View`
@@ -49,6 +49,6 @@ const Container = styled.View`
 
 const Credentials = styled.Text`
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 11px;
 `

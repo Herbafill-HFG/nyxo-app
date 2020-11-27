@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
+import { fonts, StyleProps } from '@styles/themes'
+import { Period } from '@typings/state/Periods'
 import colors from '../../styles/colors'
-import { fonts, StyleProps } from '../../styles/themes'
-import { Period } from 'Types/State/Periods'
 import { IconBold } from '../iconRegular'
 import TranslatedText from '../TranslatedText'
 
@@ -67,5 +67,5 @@ export const Streak = styled(TranslatedText)`
   margin-left: 10px;
   font-size: 12px;
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `

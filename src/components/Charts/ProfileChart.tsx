@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
-import { constants, fonts, StyleProps } from '../../styles/themes'
+import { constants, fonts, StyleProps } from '@styles/themes'
 
 const data = [
   {
@@ -37,7 +37,7 @@ const PhotoContainer = styled.View`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  border-bottom-color: ${(props: StyleProps) => props.theme.HAIRLINE_COLOR};
+  border-bottom-color: ${({ theme }) => theme.HAIRLINE_COLOR};
   border-bottom-width: ${constants.hairlineWidth}px;
 `
 

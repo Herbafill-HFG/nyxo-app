@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { getSelectedWeekCompleted } from '@selectors/coaching-selectors/coaching-selectors'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 import TranslatedText from '../TranslatedText'
 
 const WeekCompleted = () => {
@@ -37,5 +37,5 @@ const Started = styled.Text``
 const SectionTitle = styled(TranslatedText)`
   font-size: 15px;
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `

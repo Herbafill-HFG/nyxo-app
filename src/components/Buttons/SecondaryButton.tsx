@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
+import { fonts } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts } from '../../styles/themes'
 import TranslatedText from '../TranslatedText'
 import ScalingButton from './ScalingButton'
 
@@ -40,13 +40,13 @@ const Button = styled.View<ButtonProps>`
   width: auto;
   align-items: center;
   background-color: ${(props) =>
-    props.white ? colors.white : colors.radiantBlue};
+    props.white ? colors.white : colors.darkBlue};
   opacity: ${(props: ButtonProps) => (props.disabled ? 0.2 : 1)};
 `
 
 const ButtonText = styled(TranslatedText)<ButtonProps>`
   font-family: ${fonts.medium};
-  color: ${(props) => (props.white ? colors.radiantBlue : colors.white)};
+  color: ${(props) => (props.white ? colors.darkBlue : colors.white)};
   font-size: 15px;
   text-align: center;
   opacity: ${(props: ButtonProps) => (props.disabled ? 0.5 : 1)};

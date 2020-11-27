@@ -1,77 +1,51 @@
-import React, { FC } from 'react'
-import { View, FlatList } from 'react-native'
-import Animated from 'react-native-reanimated'
-import { useSelector } from 'react-redux'
-import {
-  CombinedWeek,
-  getCombinedWeeks,
-  getCurrentWeek
-} from '@selectors/coaching-selectors'
-import styled from 'styled-components/native'
 import { WIDTH } from '@helpers/Dimensions'
-import { H3 } from '../Primitives/Primitives'
+import { CoachingPeriod } from '@hooks/coaching/useCoaching'
+import { CombinedWeek, getCombinedWeeks } from '@selectors/coaching-selectors'
+import React, { FC } from 'react'
+import { FlatList, ListRenderItem, RefreshControlProps } from 'react-native'
+import { useSelector } from 'react-redux'
 import WeekCard from './WeekCard'
 
 export const cardWidth = WIDTH - 40
 export const cardMargin = 5
-const xOffset = new Animated.Value(0)
 
-const WeekCarousel: FC = () => {
-  const currentWeek = useSelector(getCurrentWeek)
-  const combined = useSelector(getCombinedWeeks)
-  const ongoing = combined
+type Props = {
+  ListHeaderComponent: React.ComponentType<any> | React.ReactElement | null
+  refreshControl?: React.ReactElement<RefreshControlProps>
+  coaching?: CoachingPeriod
+}
 
-  const renderWeekCard = ({ item }: { item: CombinedWeek }) => {
+const WeekCarousel: FC<Props> = ({
+  ListHeaderComponent,
+  refreshControl,
+  coaching
+}) => {
+  const ongoing = useSelector(getCombinedWeeks)
+
+  const renderWeekCard: ListRenderItem<CombinedWeek> | null | undefined = ({
+    item
+  }) => {
     return (
       <WeekCard
         key={item.slug}
         week={item}
         cardMargin={cardMargin}
         cardWidth={cardWidth}
+        coaching={coaching}
       />
     )
   }
 
-  const activeWeekIndex = ongoing.findIndex(
-    (week: CombinedWeek) => week.contentId === currentWeek
-  )
-  const snapOffets: number[] = ongoing.map(
-    (item, index) => index * (cardWidth + cardMargin * 2)
-  )
-  const inset = (WIDTH - cardWidth - cardMargin) / 2
-
   return (
-    <View>
-      <Container>
-        <H3>COACHING_WEEKS</H3>
-      </Container>
-      <FlatList
-        contentContainerStyle={{
-          paddingLeft: inset,
-          paddingRight: inset
-        }}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        decelerationRate="fast"
-        directionalLockEnabled
-        initialScrollIndex={activeWeekIndex}
-        snapToOffsets={snapOffets}
-        getItemLayout={(_: CombinedWeek[], index: number) => ({
-          index,
-          length: cardWidth,
-          offset: (cardWidth + cardMargin) * index
-        })}
-        snapToAlignment="center"
-        snapToEnd={false}
-        data={ongoing}
-        renderItem={renderWeekCard}
-      />
-    </View>
+    <FlatList
+      ListHeaderComponent={ListHeaderComponent}
+      refreshControl={refreshControl}
+      showsHorizontalScrollIndicator={false}
+      snapToAlignment="center"
+      data={ongoing}
+      renderItem={renderWeekCard}
+    />
   )
 }
 
 export default WeekCarousel
-
-const Container = styled.View`
-  padding: 0px 20px;
-`

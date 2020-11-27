@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import {
   FlatList,
   SafeAreaView as RNSafeAreaView,
@@ -7,11 +7,12 @@ import {
 import ReactNativeModal from 'react-native-modal'
 import Animated from 'react-native-reanimated'
 import styled from 'styled-components/native'
+import { fonts, StyleProps } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts, StyleProps } from '../../styles/themes'
 import { IconBold } from '../iconRegular'
 import TranslatedText, { AnimatedTranslatedText } from '../TranslatedText'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Modal = ReactNativeModal as any
 
 interface ContainerProps extends StyleProps {
@@ -19,16 +20,16 @@ interface ContainerProps extends StyleProps {
 }
 
 export const Container = styled.View<ContainerProps>`
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 16px;
+  margin-left: 16px;
   flex: 1;
-  background-color: ${(props: ContainerProps) =>
-    props.background ? props.theme.PRIMARY_BACKGROUND_COLOR : 'transparent'};
+  background-color: ${({ theme, background }) =>
+    background ? theme.PRIMARY_BACKGROUND_COLOR : 'transparent'};
 `
 
 export const Bordered = styled.View`
   border-bottom-width: ${StyleSheet.hairlineWidth}px;
-  border-bottom-color: ${(props: StyleProps) => props.theme.HAIRLINE_COLOR};
+  border-bottom-color: ${({ theme }) => theme.HAIRLINE_COLOR};
 `
 
 export const Row = styled.View`
@@ -42,8 +43,7 @@ export const Column = styled.View`
 
 export const BGContainer = styled.View`
   flex: 1;
-  background-color: ${(props: StyleProps) =>
-    props.theme.PRIMARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR};
 `
 
 interface TextProps extends StyleProps {
@@ -56,8 +56,8 @@ export const H1 = styled(TranslatedText)<StyleProps & TextProps>`
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
@@ -66,8 +66,8 @@ export const H1N = styled.Text<StyleProps & TextProps>`
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
@@ -75,50 +75,48 @@ export const PageTitle = styled(AnimatedTranslatedText)<StyleProps & TextProps>`
   font-size: 34px;
   margin: 40px 20px 20px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.medium};
 `
 
-export const H1Animated = styled(AnimatedTranslatedText)<
-  StyleProps & TextProps
->`
+export const H1Animated = styled(AnimatedTranslatedText)<TextProps>`
   font-size: 34px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
-export const H2 = styled(TranslatedText)`
+export const H2 = styled(TranslatedText)<TextProps>`
   font-size: 28px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
-export const H2N = styled.Text`
+export const H2N = styled.Text<TextProps>`
   font-size: 28px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: TextProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
-export const H3 = styled(TranslatedText)`
+export const H3 = styled(TranslatedText)<TextProps>`
   font-size: 22px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
@@ -126,33 +124,33 @@ export const H3Margin = styled(H3)`
   margin: 0px 20px;
 `
 
-export const H4 = styled(TranslatedText)`
+export const H4 = styled(TranslatedText)<TextProps>`
   font-size: 20px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
-export const H5 = styled(TranslatedText)`
+export const H5 = styled(TranslatedText)<TextProps>`
   font-size: 17px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
-export const H4N = styled.Text`
+export const H4N = styled.Text<TextProps>`
   font-size: 20px;
   margin-bottom: 10px;
   margin-top: 5px;
   font-weight: bold;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-family: ${fonts.bold};
 `
 
@@ -162,11 +160,9 @@ export const P = styled(TranslatedText)<TextProps>`
   font-family: ${fonts.medium};
   margin-top: 10px;
   margin-bottom: 10px;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: TextProps) =>
-    props.secondary
-      ? props.theme.SECONDARY_TEXT_COLOR
-      : props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme, secondary }) =>
+    secondary ? theme.SECONDARY_TEXT_COLOR : theme.PRIMARY_TEXT_COLOR};
 `
 
 export const PN = styled.Text<TextProps>`
@@ -175,38 +171,31 @@ export const PN = styled.Text<TextProps>`
   font-family: ${fonts.medium};
   margin-top: 10px;
   margin-bottom: 10px;
-  text-align: ${(props: TextProps) => (props.center ? 'center' : 'left')};
-  color: ${(props: TextProps) =>
-    props.secondary
-      ? props.theme.SECONDARY_TEXT_COLOR
-      : props.theme.PRIMARY_TEXT_COLOR};
+  text-align: ${({ center }) => (center ? 'center' : 'left')};
+  color: ${({ theme, secondary }) =>
+    secondary ? theme.SECONDARY_TEXT_COLOR : theme.PRIMARY_TEXT_COLOR};
 `
 
-export const SafeAreaView = styled(RNSafeAreaView)<StyleProps>`
-  background-color: ${(props: StyleProps) =>
-    props.theme.PRIMARY_BACKGROUND_COLOR};
+export const SafeAreaView = styled(RNSafeAreaView)`
+  background-color: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR};
   flex: 1;
 `
 
-export const StyledModal = styled(Modal)<StyleProps>`
+export const StyledModal = styled(Modal)`
   bottom: 0;
   left: 0;
   justify-content: center;
   flex: 1;
-  background-color: ${(props: StyleProps) =>
-    props.theme.PRIMARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR};
   margin: 100px 0px 0px 0px;
 `
 
-export const StyledScrollView = styled.ScrollView.attrs(
-  (props: StyleProps) => ({
-    contentContainerStyle: {
-      backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR
-    }
-  })
-)`
-  /* background-color: ${(props: StyleProps) =>
-    props.theme.PRIMARY_BACKGROUND_COLOR}; */
+export const StyledScrollView = styled.ScrollView.attrs(({ theme }) => ({
+  contentContainerStyle: {
+    backgroundColor: theme.PRIMARY_BACKGROUND_COLOR
+  }
+}))`
+  /* background-color: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR}; */
 `
 
 interface CheckBoxProps {
@@ -220,7 +209,7 @@ export const CheckBox: FC<CheckBoxProps> = ({ checked, size }) => {
         name={checked ? 'circleCheck' : 'circleUncheck'}
         height={size}
         width={size}
-        fill={colors.radiantBlue}
+        fill={colors.darkBlue}
       />
     </CheckBoxContainer>
   )
@@ -232,3 +221,7 @@ const CheckBoxContainer = styled.View`
 `
 
 export const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+export const ThemedRefreshControl = styled.RefreshControl.attrs(() => ({
+  tintColor: colors.darkBlue
+}))``

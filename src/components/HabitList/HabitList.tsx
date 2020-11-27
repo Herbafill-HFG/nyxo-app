@@ -6,12 +6,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
 import { getHabitSections } from '@selectors/habit-selectors/habit-selectors'
 import styled from 'styled-components/native'
+import { getEditMode } from '@selectors/ManualDataSelectors'
+import { fonts, StyleProps } from '@styles/themes'
 import HabitCard from '../HabitCard/HabitCard'
 import { H3 } from '../Primitives/Primitives'
 import TranslatedText from '../TranslatedText'
-import { getEditMode } from '@selectors/ManualDataSelectors'
 import colors from '../../styles/colors'
-import { fonts, StyleProps } from '../../styles/themes'
 import { IconBold } from '../iconRegular'
 
 type Props = {
@@ -59,7 +59,7 @@ const HabitList = (props: Props) => {
                 width={20}
                 height={20}
                 name="circleAdd"
-                fill={colors.radiantBlue}
+                fill={colors.darkBlue}
               />
             </NewHabitButton>
           </TitleRow>
@@ -82,12 +82,12 @@ const HabitList = (props: Props) => {
 
 export default memo(HabitList)
 
-const List = styled(SectionList).attrs((props: StyleProps) => ({
+const List = styled(SectionList).attrs(({ theme }) => ({
   contentContainerStyle: {
-    backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR
+    backgroundColor: theme.PRIMARY_BACKGROUND_COLOR
   }
 }))`
-  background-color: ${colors.radiantBlue};
+  background-color: ${colors.darkBlue};
 `
 
 const Fill = styled.View`
@@ -113,7 +113,7 @@ const NewHabitButton = styled.TouchableOpacity`
 
 const ShowAllText = styled(TranslatedText)`
   font-family: ${fonts.bold};
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
 `
 
 const FooterRow = styled.View`

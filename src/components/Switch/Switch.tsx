@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 
 interface Props {
   valueChange: Function
@@ -35,7 +35,7 @@ const Row = styled.View`
 
 const Source = styled.Text`
   font-family: ${fonts.bold};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `
 
 const Toggle = styled.Switch``

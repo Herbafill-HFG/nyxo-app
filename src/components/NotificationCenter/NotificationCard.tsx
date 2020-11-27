@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components/native'
 import { IconBold } from '@components/iconRegular'
 import TranslatedText from '@components/TranslatedText'
-import colors from 'styles/colors'
+import colors from '@styles/colors'
 import { H5, P } from '../Primitives/Primitives'
 
 type Props = {
@@ -82,7 +82,7 @@ const Button = styled.TouchableOpacity``
 const ButtonText = styled(TranslatedText)`
   font-size: 15px;
   font-family: ${({ theme }) => theme.FONT_BOLD};
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
   text-align: center;
   margin: 20px 0px 0px;
 `

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
+import { fonts, StyleProps } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts, StyleProps } from '../../styles/themes'
 import RichText from '../RichText'
 
 interface Props {
@@ -26,11 +26,11 @@ export default memo(SectionHeader)
 const SectionTitle = styled.Text`
   font-family: ${fonts.bold};
   font-size: 18px;
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
   margin-bottom: 15px;
 `
 
 const Container = styled.View`
   padding: 20px 20px;
-  background: ${(props: StyleProps) => props.theme.PRIMARY_BACKGROUND_COLOR};
+  background: ${({ theme }) => theme.PRIMARY_BACKGROUND_COLOR};
 `

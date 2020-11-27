@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { View } from 'react-native'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 import TranslatedText from '../TranslatedText'
 
 interface AuthorCardProps {
@@ -41,12 +41,12 @@ const Avatar = styled.Image`
 const Name = styled.Text`
   font-family: ${fonts.bold};
   font-size: 17px;
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `
 
 const Credentials = styled.Text`
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
   font-size: 12px;
 `
 
@@ -55,5 +55,5 @@ const Title = styled(TranslatedText)`
   font-size: 13px;
   text-transform: uppercase;
   margin-bottom: 5px;
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `

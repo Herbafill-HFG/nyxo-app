@@ -7,12 +7,12 @@ import {
   HEADER_MIN_HEIGHT,
   SMART_TOP_PADDING
 } from '@helpers/Dimensions'
-import { fonts } from '../../styles/themes'
+import { fonts } from '@styles/themes'
 import GoBack from '../Buttons/GoBack'
 
 interface Props {
   yOffset: Animated.Value<number>
-  title: string
+  title?: string
 }
 
 const TopHeader: FC<Props> = ({ yOffset, title }) => {
@@ -38,7 +38,7 @@ const TopHeader: FC<Props> = ({ yOffset, title }) => {
         <GoBack />
       </BackButton>
       <TitleContainer>
-        <WeekTitleSmall numberOfLines={2} adjustsFontSizeToFit style={fadeIn()}>
+        <WeekTitleSmall numberOfLines={3} adjustsFontSizeToFit style={fadeIn()}>
           {title}
         </WeekTitleSmall>
       </TitleContainer>

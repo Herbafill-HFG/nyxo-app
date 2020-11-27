@@ -1,32 +1,31 @@
-import React, { memo, useState } from 'react'
-import { RefreshControl, ScrollView } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { getLoading as getCodeLoading } from '@selectors/linking-selectors'
-import { getConnectionId } from '@actions/linking/linking-actions'
 import { logout } from '@actions/auth/auth-actions'
+import { getConnectionId } from '@actions/linking/linking-actions'
 import GoBack, { GoBackContainer, Spacer } from '@components/Buttons/GoBack'
 import { PrimaryButton } from '@components/Buttons/PrimaryButton'
+import SignupBottomButton from '@components/Signup/SignupBottomButton'
 import {
   Container,
   H2,
   P,
-  Row,
   SafeAreaView
 } from '@components/Primitives/Primitives'
 import CodeDisclaimer from '@components/SettingsSpecific/CodeDisclaimer'
 import LinkModule from '@components/SettingsSpecific/LinkModule'
-import ROUTE from '../../config/routes/Routes'
 import {
   getAuthState,
   getLoading
 } from '@selectors/auth-selectors/auth-selectors'
+import { getLoading as getCodeLoading } from '@selectors/linking-selectors'
+import React, { memo } from 'react'
+import { RefreshControl, ScrollView } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import ROUTE from '../../config/routes/Routes'
 import colors from '../../styles/colors'
 
 const CloudView = ({ navigation, route }) => {
   const isLoggedIn = useSelector(getAuthState)
   const linkingLoading = useSelector(getCodeLoading)
   const logoutLoading = useSelector(getLoading)
-  const [refreshing, setRefreshing] = useState(false)
   const dispatch = useDispatch()
 
   const linkCode = route?.params?.link
@@ -52,7 +51,7 @@ const CloudView = ({ navigation, route }) => {
       <ScrollView
         refreshControl={
           <RefreshControl
-            tintColor={colors.radiantBlue}
+            tintColor={colors.darkBlue}
             onRefresh={refresh}
             refreshing={linkingLoading}
           />
@@ -78,15 +77,7 @@ const CloudView = ({ navigation, route }) => {
               />
             </>
           )}
-          {!isLoggedIn && (
-            <>
-              <P>SCcloudRequirements</P>
-              <Row style={{ marginTop: 50 }}>
-                <PrimaryButton title="Sign in" onPress={handleNavToSignIn} />
-                <PrimaryButton title="Register" onPress={handleNavToRegister} />
-              </Row>
-            </>
-          )}
+          {!isLoggedIn && <SignupBottomButton />}
         </Container>
       </ScrollView>
       <CodeDisclaimer linkCode={linkCode} />

@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 import { IconBold } from '@components/iconRegular'
 import { useNavigation } from '@react-navigation/core'
-import ROUTE from 'config/routes/Routes'
-import colors from 'styles/colors'
+import ROUTE from '@config/routes/Routes'
+import colors from '@styles/colors'
 import { getStaticNotificationsCount } from '@selectors/notification-selectors/notification-selectors'
 import { useSelector } from 'react-redux'
 
@@ -44,7 +44,7 @@ const NotificationCountContainer = styled.View`
   top: 0;
   right: 0;
   position: absolute;
-  background-color: ${colors.radiantBlue};
+  background-color: ${colors.darkBlue};
   height: 20px;
   width: 20px;
   border-radius: 30px;

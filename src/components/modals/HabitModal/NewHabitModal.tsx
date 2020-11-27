@@ -1,6 +1,6 @@
 import { addHabit } from '@actions/habit/habit-actions'
 import { toggleNewHabitModal } from '@actions/modal/modal-actions'
-import { HabitSchema } from 'config/Validation'
+import { HabitSchema } from '@config/Validation'
 import { Formik } from 'formik'
 import React, { memo, useState } from 'react'
 import { ScrollView } from 'react-native'
@@ -8,7 +8,7 @@ import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { getNewHabitModal } from '@selectors/ModalSelectors'
 import styled from 'styled-components/native'
-import { Period } from 'Types/State/Periods'
+import { Period } from '@typings/state/Periods'
 import { StyleProps } from '../../../styles/themes'
 import BottomButton from '../../Buttons/BottomButton'
 import HabitModalFieldSection from './HabitModalFieldSection'
@@ -121,11 +121,10 @@ const StyledModal = styled(Modal)`
   top: 0;
 `
 
-const Container = styled.SafeAreaView<StyleProps>`
+const Container = styled.SafeAreaView`
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   flex: 1;
-  background-color: ${(props: StyleProps) =>
-    props.theme.SECONDARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.SECONDARY_BACKGROUND_COLOR};
   justify-content: space-between;
 `

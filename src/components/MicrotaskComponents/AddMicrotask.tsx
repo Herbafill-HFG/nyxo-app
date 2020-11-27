@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
+import { fonts } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts } from '../../styles/themes'
 import ScalingButton from '../Buttons/ScalingButton'
 import TranslatedText from '../TranslatedText'
 
@@ -36,7 +36,7 @@ const Container = styled.View`
 `
 
 const ButtonContainer = styled.View`
-  background-color: ${colors.radiantBlue};
+  background-color: ${colors.darkBlue};
   border-radius: 5px;
   padding: 20px;
   align-items: center;

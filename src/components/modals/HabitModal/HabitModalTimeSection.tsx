@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
-import { Period } from 'Types/State/Periods'
+import { Period } from '@typings/state/Periods'
 import SetTimePeriodButtons from './SetTimePeriodButtons'
 import TranslatedText from '../../TranslatedText'
 import { StyleProps, fonts } from '../../../styles/themes'
@@ -31,7 +31,7 @@ const Section = styled.View`
 
 const SectionTitle = styled(TranslatedText)`
   font-size: 15px;
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
   font-family: ${fonts.bold};
   opacity: 0.6;
 `

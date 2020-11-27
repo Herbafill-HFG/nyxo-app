@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { memo } from 'react'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 import ScalingButton from './ScalingButton'
-import IconBold from '../iconBold'
+import { IconBold } from '../iconRegular'
 import TranslatedText from '../TranslatedText'
 
 interface BackButtonInterface {
@@ -40,8 +40,8 @@ const Button = styled.View`
   flex-direction: row;
 `
 
-const Icon = styled(IconBold).attrs((props: StyleProps) => ({
-  fill: props.theme.PRIMARY_TEXT_COLOR
+const Icon = styled(IconBold).attrs(({ theme }) => ({
+  fill: theme.PRIMARY_TEXT_COLOR
 }))``
 
 interface TextProps extends StyleProps {
@@ -51,5 +51,5 @@ const Text = styled(TranslatedText)<TextProps>`
   margin-left: 5px;
   font-size: 15px;
   font-family: ${fonts.medium};
-  color: ${(props: TextProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `

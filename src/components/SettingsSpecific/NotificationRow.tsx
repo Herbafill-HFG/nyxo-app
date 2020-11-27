@@ -1,9 +1,9 @@
 import React, { memo } from 'react'
 import { Switch } from 'react-native'
 import styled from 'styled-components/native'
+import { constants, StyleProps } from '@styles/themes'
 import { P } from '../Primitives/Primitives'
 import { NotificationDataItemProps } from '../../screens/settings/Notifications'
-import { constants, StyleProps } from '../../styles/themes'
 
 const NotificationRow = (props: NotificationDataItemProps) => {
   const onValueChange = (value: boolean) => {
@@ -24,7 +24,7 @@ export default memo(NotificationRow)
 const Wrapper = styled.View`
   padding: 10px 0px;
   border-bottom-width: ${constants.hairlineWidth}px;
-  border-bottom-color: ${(props: StyleProps) => props.theme.HAIRLINE_COLOR};
+  border-bottom-color: ${({ theme }) => theme.HAIRLINE_COLOR};
 `
 
 const Container = styled.View`

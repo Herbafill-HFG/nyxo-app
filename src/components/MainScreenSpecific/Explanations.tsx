@@ -1,36 +1,31 @@
-import moment from 'moment'
-import React from 'react'
+import { minutesToHoursString } from '@helpers/time'
+import { getAsleepDuration, getInBedDuration } from '@selectors/night-selectors'
+import { fonts } from '@styles/themes'
+import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components/native'
-import { minutesToHoursString } from '@helpers/time'
 import colors from '../../styles/colors'
-import { fonts, StyleProps } from '../../styles/themes'
-import { getGoToSleepWindowCenter } from '@selectors/insight-selectors/Insights'
-import {
-  getSelectedDayAsleepDuration,
-  getSelectedDayInBedDuration
-} from '@selectors/SleepDataSelectors'
 
-const Explanations = () => {
-  const inbed = minutesToHoursString(useSelector(getSelectedDayInBedDuration))
-  const asleep = minutesToHoursString(useSelector(getSelectedDayAsleepDuration))
-  // const efficiency = useSelector(getSelec);
-  const window = useSelector(getGoToSleepWindowCenter)
+const Explanations: FC = () => {
+  const inbed = minutesToHoursString(useSelector(getInBedDuration))
+  const asleep = minutesToHoursString(useSelector(getAsleepDuration))
+  // const window = useSelector(getGoToSleepWindowCenter)
+
   const stats = [
-    { title: 'sleep', figure: inbed, color: colors.radiantBlue },
-    { title: 'asleep', figure: asleep, color: colors.inBedColor },
+    { title: 'sleep', figure: inbed, color: colors.darkBlue },
+    { title: 'asleep', figure: asleep, color: colors.darkBlue },
     { title: 'efficiency', figure: '100%', color: colors.nightAccent },
     {
       title: 'window',
-      figure: moment(window).format('HH:mm'),
+      figure: 0,
       color: colors.fallAsleep
     }
   ]
 
   return (
     <Container>
-      {stats.map((item, index) => (
-        <Item key={index}>
+      {stats.map((item) => (
+        <Item key={item.title}>
           <Dot color={item.color} />
           <Column>
             <Title>{item.title}</Title>
@@ -73,12 +68,12 @@ const Title = styled.Text`
   text-transform: uppercase;
   font-size: 12px;
   font-family: ${fonts.bold};
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `
 
 const Figure = styled.Text`
   text-transform: uppercase;
   font-size: 15px;
   font-family: ${fonts.bold};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `

@@ -88,18 +88,6 @@ const SleepTime = (props: SleepTimeProps) => {
   const string = `${formattedStart} - ${formattedEnd}`
   return (
     <G>
-      <ThemedText
-        x={x}
-        y={y - 40}
-        textAnchor="middle"
-        fontFamily="Montserrat-Medium"
-        fontWeight="bold"
-        textLength={100}
-        alignmentBaseline="central"
-        fontSize="13">
-        {translate('CLOCK_SLEEP')}
-      </ThemedText>
-
       <SVGText
         id="inbed"
         x={x}
@@ -110,7 +98,7 @@ const SleepTime = (props: SleepTimeProps) => {
         textLength={100}
         alignmentBaseline="central"
         fontSize="13"
-        fill={colors.inBedColor}>
+        fill={colors.darkBlue}>
         {string}
       </SVGText>
 

@@ -3,8 +3,8 @@ import { View } from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import ViewOverflow from 'react-native-view-overflow'
 import styled from 'styled-components/native'
+import { fonts } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts } from '../../styles/themes'
 import { IconBold } from '../iconRegular'
 import { Container, H2 } from '../Primitives/Primitives'
 import TranslatedText from '../TranslatedText'
@@ -20,7 +20,7 @@ const WeekSummary = () => {
         <ListItemTitle>{item.requirement}</ListItemTitle>
         {item.completed ? (
           <Icon
-            fill={colors.radiantBlue}
+            fill={colors.darkBlue}
             height={20}
             width={20}
             name="circleCheck"
@@ -47,7 +47,7 @@ const WeekSummary = () => {
           rotation={0}
           lineCap="round"
           fill={50}
-          tintColor={colors.radiantBlue}
+          tintColor={colors.darkBlue}
           backgroundColor="green">
           {(fill: number) => <Percentage>{`${Math.round(fill)}%`}</Percentage>}
         </AnimatedCircularProgress>
@@ -87,7 +87,7 @@ const ListItemTitle = styled(TranslatedText)`
 const Percentage = styled.Text`
   font-size: 10;
   font-family: ${fonts.bold};
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
 `
 
 const IncompleteIcon = styled(ViewOverflow)`

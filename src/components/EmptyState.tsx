@@ -1,6 +1,6 @@
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../styles/themes'
+import { fonts } from '../styles/themes'
 import { IconBold } from './iconRegular'
 import TranslatedText from './TranslatedText'
 
@@ -8,11 +8,11 @@ interface Props {
   text?: string
 }
 
-const EmptyState = (props: Props) => {
+const EmptyState: FC<Props> = ({ text }) => {
   return (
     <Container>
       <Icon name="smileyDisappointed" height={50} width={50} />
-      <Text>{props.text ? props.text : 'EmptyState'}</Text>
+      <Text>{text || 'EmptyState'}</Text>
     </Container>
   )
 }
@@ -31,9 +31,9 @@ const Text = styled(TranslatedText)`
   font-size: 17px;
   text-align: center;
   font-family: ${fonts.bold};
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
 `
 
-const Icon = styled(IconBold).attrs((props: StyleProps) => ({
-  fill: props.theme.SECONDARY_TEXT_COLOR
+const Icon = styled(IconBold).attrs(({ theme }) => ({
+  fill: theme.SECONDARY_TEXT_COLOR
 }))``

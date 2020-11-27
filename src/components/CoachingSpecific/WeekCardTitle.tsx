@@ -1,10 +1,9 @@
-import React from 'react'
-import { View } from 'react-native'
 import { WEEK_STAGE } from '@selectors/coaching-selectors'
+import React, { FC } from 'react'
 import styled from 'styled-components/native'
+import { fonts } from '@styles/themes'
 import colors from '../../styles/colors'
-import { fonts } from '../../styles/themes'
-import IconBold from '../iconBold'
+import { IconBold } from '../iconRegular'
 import TranslatedText from '../TranslatedText'
 
 interface Props {
@@ -12,22 +11,17 @@ interface Props {
   stage?: WEEK_STAGE
 }
 
-const WeekCardTitle = ({ weekName, stage }: Props) => {
+const WeekCardTitle: FC<Props> = ({ weekName, stage }) => {
   const { stageTitle, icon } = getStageString(stage)
   return (
-    <Row>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <IconBold
-          name={icon}
-          fill={colors.radiantBlue}
-          height={10}
-          width={10}
-        />
+    <Container>
+      <Row>
+        <IconBold name={icon} fill={colors.darkBlue} height={10} width={10} />
         <Title numberOfLines={2}>{stageTitle}</Title>
-      </View>
+      </Row>
 
       <Theme numberOfLines={2}>{weekName}</Theme>
-    </Row>
+    </Container>
   )
 }
 
@@ -48,11 +42,16 @@ const getStageString = (
   }
 }
 
-const Row = styled.View`
+const Container = styled.View`
   flex: 1;
   margin-bottom: 10px;
   flex-direction: column;
   justify-content: center;
+`
+
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
 `
 
 const Title = styled(TranslatedText)`
@@ -60,7 +59,7 @@ const Title = styled(TranslatedText)`
   text-transform: uppercase;
   font-size: 12px;
   font-family: ${fonts.medium};
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
 `
 
 const Theme = styled.Text`

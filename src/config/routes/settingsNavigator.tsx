@@ -1,18 +1,17 @@
-import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
-import Settings from '../../screens/settings/settings'
-import SetSource from '../../screens/settings/SourceSettings'
-import CloudSettings from '../../screens/settings/CloudSettings'
-import NotificationSettings from '../../screens/settings/Notifications'
-import ManageSubscription from '../../screens/settings/ManageSubscription'
-import CoachingSettings from '../../screens/settings/CoachingSettings'
-import DevelopmentMenu from '../../screens/settings/DevelopmentMenu'
+import CloudSettings from '@screens/settings/CloudSettings'
+import CoachingSettings from '@screens/settings/CoachingSettings'
+import GarminScreen from '@screens/settings/GarminScreen'
+import ManageSubscription from '@screens/settings/ManageSubscription'
+import NotificationSettings from '@screens/settings/Notifications'
+import Settings from '@screens/settings/settings'
+import SetSource from '@screens/settings/SourceSettings'
+import React, { FC } from 'react'
 import ROUTE from './Routes'
-import GarminScreen from 'screens/settings/GarminScreen'
+
 const Stack = createNativeStackNavigator()
 
-const SettingsNavigator = () => {
+const SettingsNavigator: FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -30,11 +29,11 @@ const SettingsNavigator = () => {
         component={CloudSettings}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="NotificationSettings"
         component={NotificationSettings}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="CoachingSettings"
         component={CoachingSettings}
@@ -43,11 +42,6 @@ const SettingsNavigator = () => {
       <Stack.Screen
         name="ManageSubscription"
         component={ManageSubscription}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="DevelopmentMenu"
-        component={DevelopmentMenu}
         options={{ headerShown: false }}
       />
       <Stack.Screen

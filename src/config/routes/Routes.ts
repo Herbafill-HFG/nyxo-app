@@ -1,6 +1,6 @@
 enum ROUTE {
   APP = 'App',
-
+  ONBOARDING = 'ONBOARDING',
   AUTH = 'Auth',
   REGISTER = 'Register',
   LOGIN = 'Login',
@@ -14,6 +14,7 @@ enum ROUTE {
   NOTIFICATION_CENTER = 'NOTIFICATION_CENTER',
 
   COACHING = 'Coaching',
+  COACHING_INTRODUCTION = 'COACHING_INTRODUCTION',
   WEEK = 'CoachingWeek',
   LESSON = 'LessonView',
 

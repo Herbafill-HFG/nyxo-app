@@ -6,7 +6,7 @@ import {
   INLINES,
   MARKS
 } from '@contentful/rich-text-types'
-import { WIDTH } from 'helpers/Dimensions'
+import { WIDTH } from '@helpers/Dimensions'
 import React, { ReactNode, useLayoutEffect, useState } from 'react'
 import { Image, Linking } from 'react-native'
 import styled from 'styled-components/native'
@@ -201,7 +201,7 @@ const Line = styled.View`
 `
 
 const Link = styled(Paragraph)`
-  color: ${colors.radiantBlue};
+  color: ${colors.darkBlue};
 `
 
 const List = ({

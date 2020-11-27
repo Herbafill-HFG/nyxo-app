@@ -1,6 +1,6 @@
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer'
 import { actionCreators as contentActions } from '@reducers/content-reducer/content-reducer'
-import CONFIG from 'config/Config'
+import CONFIG from '@config/Config'
 import { ContentfulClientApi, Entry } from 'contentful'
 import I18n from 'i18n-js'
 import {
@@ -9,14 +9,16 @@ import {
   ContentWeek,
   ExampleHabit,
   Section
-} from 'Types/CoachingContentState'
-import { ICoachingWeekFields, ILessonFields } from 'Types/generated/contentful'
-import { Dispatch, Thunk } from 'Types/ReduxActions'
-import { sendError } from '../notifications'
+} from '@typings/CoachingContentState'
+import {
+  ICoachingWeekFields,
+  ILessonFields
+} from '@typings/generated/contentful'
+import { Dispatch, Thunk } from '@typings/redux-actions'
 
 const { createClient } = require('contentful/dist/contentful.browser.min.js')
 
-const client: ContentfulClientApi = createClient({
+export const contentfulClient: ContentfulClientApi = createClient({
   space: CONFIG.CONTENTFUL_SPACE,
   accessToken: CONFIG.CONTENTFUL_SPACE_ACCESS_TOKEN
 })
@@ -45,10 +47,10 @@ export const getAllWeeks = (): Thunk => async (dispatch: Dispatch) => {
   await dispatch(contentActions.updateContentStart())
 
   try {
-    const coachingWeeks: any = await client.getEntries({
+    const coachingWeeks: any = await contentfulClient.getEntries({
       locale,
       content_type: 'coachingWeek',
-      // 'fields.slug[ne]': 'introduction',
+      'fields.slug[ne]': 'introduction',
       include: 3
     })
 
@@ -162,10 +164,7 @@ export const getAllWeeks = (): Thunk => async (dispatch: Dispatch) => {
       })
     )
   } catch (error) {
-    await Promise.all([
-      dispatch(contentActions.updateContentError()),
-      dispatch(sendError(error))
-    ])
+    await Promise.all([dispatch(contentActions.updateContentError())])
   }
 }
 

@@ -7,14 +7,19 @@ import {
   UPDATE_EMAIL,
   UPDATE_USER_FROM_CLOUD
 } from '@actions/user/user-actions'
-import ReduxAction from 'Types/ReduxActions'
-import { UserState } from 'Types/UserState'
-import { lightTheme } from '../../../styles/themes'
+import ReduxAction from '@typings/redux-actions'
+import { UserState } from '@typings/UserState'
+import { lightTheme } from '@styles/themes'
+
+jest.mock('react-native', () => ({
+  StyleSheet: {
+    hairlineWidth: 10
+  }
+}))
 
 export const initialState: UserState = {
   syncEnabled: false,
   introduction_completed: false,
-  healthkit_enabled: false,
   appTheme: lightTheme,
   loggedIn: false,
   username: '',

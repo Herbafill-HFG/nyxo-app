@@ -6,17 +6,17 @@ import {
   DefaultTheme,
   NavigationContainer
 } from '@react-navigation/native'
+import { actionCreators as notificationActions } from '@reducers/NotificationReducer'
+import { getIsDarkMode } from '@selectors/UserSelectors'
+import { readFromStorage } from 'persist-queries'
 import Analytics from 'appcenter-analytics'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { Linking } from 'react-native'
 import Intercom from 'react-native-intercom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components/native'
-import { actionCreators as notificationActions } from '@reducers/NotificationReducer'
-import { getIsDarkMode } from '@selectors/UserSelectors'
 import { StyleProps } from '../styles/themes'
 import { navigationRef } from './NavigationHelper'
-// Navigators
 import Root from './routes/RootNavigator'
 import ROUTE from './routes/Routes'
 
@@ -70,11 +70,15 @@ const Routes: FC = () => {
 
   const [isReady, setIsReady] = useState(false)
   const [initialState, setInitialState] = useState()
-  const routeNameRef: any = useRef()
+  const routeNameRef = useRef<string>()
+
   Linking.getInitialURL()
     .then((url) => {})
     .catch((err) => console.error('An error occurred', err))
+
   useEffect(() => {
+    readQueries()
+
     const onUnreadChange = ({ count }: { count: number }) => {
       dispatch(notificationActions.updateIntercomNotificationCount(count))
     }
@@ -106,6 +110,13 @@ const Routes: FC = () => {
     }
   }, [getInitialState])
 
+  const readQueries = async () => {
+    await Promise.all([
+      readFromStorage('user'),
+      readFromStorage('userActiveCoaching')
+    ])
+  }
+
   if (!isReady) {
     return null
   }
@@ -136,7 +147,7 @@ const Routes: FC = () => {
 
 export default Routes
 
-const StyledStatusBar = styled.StatusBar.attrs((props: StyleProps) => ({
-  barStyle: props.theme.mode === 'dark' ? 'light-content' : 'dark-content',
-  backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR
+const StyledStatusBar = styled.StatusBar.attrs(({ theme }) => ({
+  barStyle: theme.mode === 'dark' ? 'light-content' : 'dark-content',
+  backgroundColor: theme.PRIMARY_BACKGROUND_COLOR
 }))``

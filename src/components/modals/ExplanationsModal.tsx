@@ -3,8 +3,8 @@ import { IconBold } from '@components/iconRegular'
 import { CloseModalButton } from '@components/modals/CloseModalButton'
 import { H2 } from '@components/Primitives/Primitives'
 import TranslatedText from '@components/TranslatedText'
-import getRating from 'helpers/rating'
-import { minutesToHoursString, toNightTime } from 'helpers/time'
+import getRating from '@helpers/rating'
+import { minutesToHoursString, toNightTime } from '@helpers/time'
 import moment from 'moment'
 import React, { FC } from 'react'
 import RNModal, { ReactNativeModal } from 'react-native-modal'
@@ -14,26 +14,24 @@ import {
   getGoToSleepWindowStart
 } from '@selectors/insight-selectors/Insights'
 import { getExplanationsModal } from '@selectors/ModalSelectors'
-import {
-  getSelectedDay,
-  getSelectedDayAsleepDuration,
-  getSelectedDayInBedDuration,
-  getSelectedDayRating
-} from '@selectors/SleepDataSelectors'
+
 import styled from 'styled-components/native'
-import colors from 'styles/colors'
-import { fonts } from 'styles/themes'
+import colors from '@styles/colors'
+import { fonts } from '@styles/themes'
+import { getInBedDuration, getAsleepDuration } from '@selectors/night-selectors'
+import { getSelectedDate } from '@selectors/calendar-selectors'
+import { format, parseISO } from 'date-fns'
 
 const Modal = RNModal as any
 
 const ExplanationsModal: FC = () => {
   const dispatch = useDispatch()
   const isVisible = useSelector(getExplanationsModal)
-  const inbed = minutesToHoursString(useSelector(getSelectedDayInBedDuration))
-  const asleep = minutesToHoursString(useSelector(getSelectedDayAsleepDuration))
-  const rating = useSelector(getSelectedDayRating)
+  const inbed = minutesToHoursString(useSelector(getInBedDuration))
+  const asleep = minutesToHoursString(useSelector(getAsleepDuration))
+  const rating = 2 // = useSelector(getSelectedDayRating)
   const { color, icon } = getRating(rating)
-  const { date } = useSelector(getSelectedDay)
+  const date = useSelector(getSelectedDate)
   const formattedDate = toNightTime(date)
   const windowStart = useSelector(getGoToSleepWindowStart)
   const windowEnd = useSelector(getGoToSleepWindowEnd)
@@ -43,18 +41,18 @@ const ExplanationsModal: FC = () => {
       title: 'STAT.BED',
       explanation: 'STAT.BED_EXPLANATION',
       figure: inbed,
-      color: colors.radiantBlue
+      color: colors.darkBlue
     },
     {
       title: 'STAT.SLEEP',
       explanation: 'STAT.SLEEP_EXPLANATION',
       figure: asleep,
-      color: colors.inBedColor
+      color: colors.darkBlue
     },
     {
       title: 'STAT.WINDOW',
       explanation: 'STAT.WINDOW_EXPLANATION',
-      figure: `${moment(windowStart).format('HH:mm')} – ${moment(
+      figure: `${format(parseISO(windowStart), 'HH:mm')} – ${moment(
         windowEnd
       ).format('HH:mm')}`,
       color: colors.fallAsleep
@@ -73,7 +71,6 @@ const ExplanationsModal: FC = () => {
 
   return (
     <StyledModal
-      on
       isVisible={isVisible}
       transparent={false}
       onSwipeComplete={closeModal}

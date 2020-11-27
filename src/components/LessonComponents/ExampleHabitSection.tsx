@@ -1,12 +1,15 @@
-import React, { memo } from 'react'
-import styled from 'styled-components/native'
-import { FlatList } from 'react-native'
-import { ExampleHabit as ExampleHabitType } from 'Types/CoachingContentState'
-import { H3Margin } from '../Primitives/Primitives'
-import { fonts, StyleProps } from '../../styles/themes'
-import ExampleHabit from '../HabitCard/ExampleHabit'
-import TranslatedText from '../TranslatedText'
 import keyExtractor from '@helpers/KeyExtractor'
+import { fonts, StyleProps } from '@styles/themes'
+import { ExampleHabit as ExampleHabitType } from '@typings/CoachingContentState'
+import React, { memo } from 'react'
+import { FlatList } from 'react-native'
+import styled from 'styled-components/native'
+import ExampleHabit, {
+  EXAMPLE_HABIT_MARGIN_LEFT,
+  EXAMPLE_HABIT_WIDTH
+} from '../HabitCard/ExampleHabit'
+import { H3Margin } from '../Primitives/Primitives'
+import TranslatedText from '../TranslatedText'
 
 const ExampleHabitSection = ({
   habits
@@ -15,6 +18,9 @@ const ExampleHabitSection = ({
 }) => {
   if (!habits) return null
 
+  const contentOffsets = habits.map(
+    (_, index) => (EXAMPLE_HABIT_WIDTH + EXAMPLE_HABIT_MARGIN_LEFT) * index
+  )
   const renderHabit = ({
     item: habit,
     index
@@ -40,10 +46,11 @@ const ExampleHabitSection = ({
         keyExtractor={keyExtractor}
         contentContainerStyle={{ paddingVertical: 20 }}
         centerContent
-        pagingEnabled
         horizontal
         data={habits}
         renderItem={renderHabit}
+        snapToOffsets={contentOffsets}
+        decelerationRate="fast"
       />
     </>
   )
@@ -54,7 +61,7 @@ export default memo(ExampleHabitSection)
 const TextSmall = styled(TranslatedText)`
   font-family: ${fonts.medium};
   font-size: 13px;
-  color: ${(props: StyleProps) => props.theme.SECONDARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.SECONDARY_TEXT_COLOR};
   margin: 10px 20px;
 `
 

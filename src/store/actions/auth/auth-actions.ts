@@ -5,14 +5,15 @@ import {
 } from '@actions/habit/habit-actions'
 import Auth from '@aws-amplify/auth'
 import { actionCreators as notificationActions } from '@reducers/NotificationReducer'
-import translate from 'config/i18n'
-import * as NavigationService from 'config/NavigationHelper'
-import ROUTE from 'config/routes/Routes'
-import { areThereChangesInLocal } from 'helpers/habits'
+import translate from '@config/i18n'
+import * as NavigationService from '@config/NavigationHelper'
+import ROUTE from '@config/routes/Routes'
+import { areThereChangesInLocal } from '@helpers/habits'
 import Intercom from 'react-native-intercom'
 import Purchases from 'react-native-purchases'
-import { GetState } from 'Types/GetState'
-import { NotificationType } from 'Types/NotificationState'
+import { GetState } from '@typings/GetState'
+import { NotificationType } from '@typings/NotificationState'
+import ReduxAction, { Dispatch, Thunk } from '@typings/redux-actions'
 import { updateEmail } from '../user/user-actions'
 
 /* ACTION TYPES */
@@ -31,20 +32,20 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 
 /* ACTIONS */
 
-export const registerStart = () => ({
+export const registerStart = (): ReduxAction => ({
   type: REGISTER_START
 })
 
-export const registerSuccess = (email: string) => ({
+export const registerSuccess = (email: string): ReduxAction => ({
   type: REGISTER_SUCCESS,
   payload: { email }
 })
 
-export const registerFailure = () => ({
+export const registerFailure = (): ReduxAction => ({
   type: REGISTER_FAILURE
 })
 
-export const loginStart = () => ({
+export const loginStart = (): ReduxAction => ({
   type: LOGIN_START
 })
 
@@ -52,32 +53,34 @@ export const loginSuccess = (
   authenticated: boolean,
   email: string,
   username: string
-) => ({
+): ReduxAction => ({
   type: LOGIN_SUCCESS,
   payload: { authenticated, email, username }
 })
 
-export const loginFailure = () => ({
+export const loginFailure = (): ReduxAction => ({
   type: LOGIN_FAILURE
 })
 
-export const logoutStart = () => ({
+export const logoutStart = (): ReduxAction => ({
   type: LOGOUT_START
 })
 
-export const logoutSuccess = () => ({
+export const logoutSuccess = (): ReduxAction => ({
   type: LOGOUT_SUCCESS
 })
 
-export const logoutFailure = () => ({
+export const logoutFailure = (): ReduxAction => ({
   type: LOGOUT_FAILURE
 })
 
 /* ASYNC ACTIONS */
 
-export const register = (email: string, password: string) => async (
-  dispatch: any
-) => {
+export const register = (
+  email: string,
+  password: string,
+  successCallback: void | (() => void)
+): Thunk => async (dispatch: Dispatch) => {
   dispatch(registerStart())
   try {
     const response = await Auth.signUp({
@@ -87,7 +90,7 @@ export const register = (email: string, password: string) => async (
     })
 
     await dispatch(registerSuccess(email))
-    await dispatch(login(email, password))
+    await dispatch(login(email, password, successCallback))
   } catch (error) {
     let { message } = error
     if (error.code === 'UsernameExistsException') {
@@ -105,7 +108,9 @@ export const register = (email: string, password: string) => async (
   }
 }
 
-export const resendEmail = (username: string) => async (dispatch: Function) => {
+export const resendEmail = (username: string): Thunk => async (
+  dispatch: Dispatch
+) => {
   try {
     await Auth.resendSignUp(username)
     await dispatch(
@@ -126,20 +131,15 @@ export const resendEmail = (username: string) => async (dispatch: Function) => {
   }
 }
 
-export const confirmSignup = (email: string, authCode: string) => async (
-  dispatch: Function
-) => {
-  const username = email
-  try {
-    const response = await Auth.confirmSignUp(username, authCode)
-  } catch (error) {}
-}
-
-export const login = (loginEmail: string, loginPassword: string) => async (
-  dispatch: Function,
-  getState: GetState
-) => {
+export const login = (
+  loginEmail: string,
+  loginPassword: string,
+  successCallback: void | (() => void)
+): Thunk => async (dispatch: Dispatch, getState: GetState) => {
   dispatch(loginStart())
+  const {
+    habitState: { habits, subHabits }
+  } = getState()
 
   try {
     const {
@@ -147,23 +147,18 @@ export const login = (loginEmail: string, loginPassword: string) => async (
       username
     } = await Auth.signIn(loginEmail, loginPassword)
 
-    const {
-      habitState: { habits, subHabits }
-    } = getState()
-
     await Intercom.updateUser({ email, user_id: username })
     await Purchases.identify(username)
     await Purchases.setEmail(email)
-    await NavigationService.navigate(ROUTE.SLEEP, {})
 
     if (areThereChangesInLocal(habits, subHabits)) {
       await dispatch(toggleMergingDialog(true))
     } else {
       await dispatch(handleHabitsFromCloudWhenLoggingIn(username, false))
-      await NavigationService.navigate(ROUTE.SLEEP, {})
     }
 
     await dispatch(loginSuccess(true, email, username))
+    await successCallback()
   } catch (error) {
     console.warn(error)
     const { code } = error
@@ -194,7 +189,7 @@ export const login = (loginEmail: string, loginPassword: string) => async (
   }
 }
 
-export const logout = () => async (dispatch: Function) => {
+export const logout = (): Thunk => async (dispatch: Dispatch) => {
   dispatch(logoutStart())
   try {
     await dispatch(handleHabitsWhenloggingOut())
@@ -211,8 +206,8 @@ export const logout = () => async (dispatch: Function) => {
   }
 }
 
-export const requestNewPassword = (username: string) => async (
-  dispatch: Function
+export const requestNewPassword = (username: string): Thunk => async (
+  dispatch: Dispatch
 ) => {
   try {
     const forgotRes = await Auth.forgotPassword(username)
@@ -230,7 +225,7 @@ export const submitNewPassword = (
   username: string,
   confirmationCode: string,
   password: string
-) => async (dispatch: Function) => {
+): Thunk => async (dispatch: Dispatch) => {
   try {
     const res = await Auth.forgotPasswordSubmit(
       username,
@@ -250,7 +245,7 @@ export const submitNewPassword = (
 export const updatePassword = (
   oldPassword: string,
   newPassword: string
-) => async (dispatch: Function) => {
+): Thunk => async (dispatch: Thunk) => {
   await Auth.currentAuthenticatedUser()
     .then((user) => Auth.changePassword(user, oldPassword, newPassword))
     .then((data) => {})

@@ -1,6 +1,6 @@
 import { editHabit as editHabitThunk } from '@actions/habit/habit-actions'
 import { toggleEditHabitModal } from '@actions/modal/modal-actions'
-import { HabitSchema } from 'config/Validation'
+import { HabitSchema } from '@config/Validation'
 import { Formik, FormikValues } from 'formik'
 import React, { memo } from 'react'
 import { ScrollView } from 'react-native'
@@ -9,15 +9,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getDraftEditHabit } from '@selectors/habit-selectors/habit-selectors'
 import { getEditHabitModal } from '@selectors/ModalSelectors'
 import styled from 'styled-components/native'
-import { Habit } from 'Types/State/habit-state'
-import { Period } from 'Types/State/Periods'
+import { Habit } from '@typings/state/habit-state'
+import { Period } from '@typings/state/Periods'
 import { StyleProps } from '../../../styles/themes'
 import HabitModalFieldSection from './HabitModalFieldSection'
 import HabitModalStreak from './HabitModalStreak'
 import HabitModalTimeSection from './HabitModalTimeSection'
 import HabitModalTopRow from './HabitModalTopRow'
 import { descriptionMaxLength, titleMaxLength } from './NewHabitModal'
-import { revertLineBreaks } from 'helpers/habits'
+import { revertLineBreaks } from '@helpers/habits'
 
 const EditHabitModal = () => {
   const show = useSelector(getEditHabitModal)
@@ -121,11 +121,10 @@ const StyledModal = styled(Modal)`
   top: 0;
 `
 
-const Container = styled.SafeAreaView<StyleProps>`
+const Container = styled.SafeAreaView`
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   flex: 1;
-  background-color: ${(props: StyleProps) =>
-    props.theme.SECONDARY_BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.SECONDARY_BACKGROUND_COLOR};
   justify-content: space-between;
 `

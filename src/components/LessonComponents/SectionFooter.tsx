@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import { fonts, StyleProps } from '../../styles/themes'
+import { fonts, StyleProps } from '@styles/themes'
 
 interface Props {
   title: string
@@ -44,7 +44,7 @@ const Number = styled.Text`
   margin-right: 5px;
   font-size: 12px;
   font-family: ${fonts.medium};
-  color: ${(props: StyleProps) => props.theme.PRIMARY_TEXT_COLOR};
+  color: ${({ theme }) => theme.PRIMARY_TEXT_COLOR};
 `
 
 // const ol = (htmlAttribs, children, convertedCSSStyles, passProps = {}) => {

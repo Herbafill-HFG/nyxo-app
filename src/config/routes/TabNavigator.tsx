@@ -7,7 +7,7 @@ import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
 import Habits from '../../screens/Shared/HabitView'
 import CoachingNavigator from './coachingNavigator'
-import CircleNavigator from './JournalNavigator'
+import JournalNavigator from './JournalNavigator'
 import ProfileNavigator from './profileNavigator'
 import ROUTE from './Routes'
 import SettingsNavigator from './settingsNavigator'
@@ -44,13 +44,13 @@ const TabNavigator: FC = () => {
           )
         }
       })}>
-      <Tab.Screen name={ROUTE.JOURNAL} component={CircleNavigator} />
+      <Tab.Screen name={ROUTE.JOURNAL} component={JournalNavigator} />
       <Tab.Screen
         name={ROUTE.COACHING}
         component={CoachingNavigator}
-        options={({ route }) => ({
-          tabBarVisible: getTabBarVisible(route)
-        })}
+        // options={({ route }) => ({
+        //   tabBarVisible: getTabBarVisible(route)
+        // })}
       />
       <Tab.Screen name={ROUTE.HABITS} component={Habits} />
       <Tab.Screen name={ROUTE.PROFILE} component={ProfileNavigator} />
@@ -60,19 +60,21 @@ const TabNavigator: FC = () => {
 }
 
 const getTabBarVisible = (route: RouteProp<ParamListBase, RouteName>) => {
-  const routeName = route.state
-    ? route.state.routes[route.state.index].name
-    : ROUTE.COACHING
-  switch (routeName) {
-    case ROUTE.COACHING:
-      return true
-    case ROUTE.WEEK:
-      return false
-    case ROUTE.LESSON:
-      return false
-    default:
-      return true
-  }
+  // const routeName = route.state
+  //   ? route.state.routes[route.state.index].name
+  //   : ROUTE.COACHING
+  // switch (routeName) {
+  //   case ROUTE.COACHING:
+  //     return true
+  //   case ROUTE.WEEK:
+  //     return false
+  //   case ROUTE.LESSON:
+  //     return false
+  //   default:
+  //     return true
+  // }
+
+  return true
 }
 
 export default TabNavigator

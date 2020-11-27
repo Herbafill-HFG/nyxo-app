@@ -1,13 +1,15 @@
 import { ScaleTime } from 'd3'
-import moment from 'moment'
 import React, { FC, useMemo } from 'react'
-import { GestureResponderEvent } from 'react-native'
 import { G, Rect } from 'react-native-svg'
-import { Day, Night, Value } from 'Types/Sleepdata'
+import styled from 'styled-components/native'
+import { Day, Night, Value } from '@typings/Sleepdata'
 import colors from '../../../styles/colors'
 
-interface Props {
-  data: Day[]
+type Props = {
+  data: {
+    date: string
+    night: Night[] & { startDate: number; endDate: number }
+  }[]
   type: Value
   scaleX: ScaleTime<number, number>
   scaleY: ScaleTime<number, number>
@@ -15,44 +17,32 @@ interface Props {
   onPress: (day: Day) => void
 }
 
-const SleepBars: FC<Props> = ({
-  data,
-  type,
-  scaleX,
-  scaleY,
-  barWidth,
-  onPress
-}) => {
-  const color = type === Value.Asleep ? colors.radiantBlue : colors.inBedColor
-
+const SleepBars: FC<Props> = ({ data, scaleX, scaleY, barWidth, onPress }) => {
   const { bars } = useMemo(
     () => ({
-      bars: data.map((datum) => {
-        const dayBars = datum.night
-          .filter((night) => night.value === type)
-          .map((item: Night) => {
-            const y = scaleY(moment(item.startDate).valueOf())
-            const x = scaleX(new Date(datum.date))
-            const height =
-              scaleY(moment(item.endDate).valueOf()) -
-              scaleY(moment(item.startDate).valueOf())
+      bars: data.map((date) => {
+        return date.night.map((night: Night) => {
+          const y = scaleY(new Date(night.startDate).valueOf())
+          const x = scaleX(new Date(date.date))
+          const height =
+            scaleY(new Date(night.endDate).valueOf()) -
+            scaleY(new Date(night.startDate).valueOf())
 
-            return (
-              <G onPress={() => onPress(datum)} key={item.startDate}>
-                <Rect
-                  x={x}
-                  width={barWidth}
-                  fillOpacity={0.7}
-                  rx={5}
-                  y={y}
-                  height={height}
-                  fill={color}
-                />
-              </G>
-            )
-          })
-
-        return <G key={datum.date}>{dayBars}</G>
+          return (
+            <G
+              key={`${night.id}_${night.value}_${night.startDate}_${night.endDate}`}>
+              <StyledRect
+                x={x}
+                width={barWidth}
+                fillOpacity={0.7}
+                rx={5}
+                y={y}
+                value={night.value}
+                height={height}
+              />
+            </G>
+          )
+        })
       })
     }),
     [data]
@@ -62,3 +52,11 @@ const SleepBars: FC<Props> = ({
 }
 
 export default SleepBars
+
+type RectProps = {
+  value: Value
+}
+
+const StyledRect = styled(Rect).attrs<RectProps>(({ value }) => ({
+  fill: value === Value.Asleep ? colors.darkBlue : colors.darkBlue
+}))``
