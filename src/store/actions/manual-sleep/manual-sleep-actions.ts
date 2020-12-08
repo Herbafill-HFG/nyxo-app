@@ -1,37 +1,30 @@
+import { fetchSleepData } from '@actions/sleep/sleep-data-actions'
+import { AppThunk } from '@typings/redux-actions'
+import { Value } from '@typings/Sleepdata'
 import moment from 'moment'
 import { Platform } from 'react-native'
-import AppleHealthKit from 'react-native-healthkit'
-import {
-  getAngleAM,
-  getNightDuration,
-  sortDays,
-  sortNights
-} from '@helpers/sleep/sleep'
-import { GetState } from '@typings/GetState'
-import { Day, Value, Night } from '@typings/Sleepdata'
-import { fetchSleepData } from '@actions/sleep/sleep-data-actions'
-import { Dispatch, Thunk } from '@typings/redux-actions'
-
-export const SET_VALUES = 'SET_VALUES'
-export const TOGGLE_EDIT_MODE = 'TOGGLE_EDIT_MODE'
+import AppleHealthKit, { SleepSample } from 'react-native-healthkit'
+import { ManualSleepActions, SET_VALUES, TOGGLE_EDIT_MODE } from './types'
 
 export const setValues = (
   start: { h: number; m: number },
   end: { h: number; m: number }
-) => ({
+): ManualSleepActions => ({
   type: SET_VALUES,
   payload: { start, end }
 })
 
-export const toggleEditMode = () => ({
+export const toggleEditMode = (): ManualSleepActions => ({
   type: TOGGLE_EDIT_MODE
 })
+
+/* ASYNC ACTIONS */
 
 export const addManualDataToNight = (
   date: string,
   nightStart: { h: number; m: number },
   nightEnd: { h: number; m: number }
-): Thunk => async (dispatch: Dispatch, getState: GetState) => {
+): AppThunk => async (dispatch) => {
   const startTime = moment(date)
     .startOf('day')
     .subtract(1, 'day')
@@ -46,16 +39,6 @@ export const addManualDataToNight = (
     .minute(nightEnd.m)
     .toISOString()
 
-  const newNightSample: Night = {
-    source: 'Nyxo',
-    sourceId: 'app.sleepcircle.application',
-    sourceName: 'Nyxo',
-    value: Value.InBed,
-    startDate: startTime,
-    endDate: endTime,
-    totalDuration: getNightDuration(startTime, endTime)
-  }
-
   if (Platform.OS === 'ios') {
     await createNight(startTime, endTime)
     await dispatch(fetchSleepData(startTime, endTime))
@@ -66,7 +49,7 @@ export const createNight = async (
   startTime: string,
   endTime: string,
   value?: Value
-) => {
+): Promise<void> => {
   if (!value) {
     const newNightBed = {
       startDate: startTime,
@@ -80,17 +63,20 @@ export const createNight = async (
       value: Value.Asleep
     }
 
-    await AppleHealthKit.saveSleep(newNightBed, (error: any, response: any) => {
-      if (error) {
-        throw error
-      } else {
-        return response
+    await AppleHealthKit.saveSleep(
+      newNightBed,
+      (error: string, response: SleepSample[]) => {
+        if (error) {
+          throw error
+        } else {
+          return response
+        }
       }
-    })
+    )
 
     await AppleHealthKit.saveSleep(
       newNightSleep,
-      (error: any, response: any) => {
+      (error: string, response: SleepSample[]) => {
         if (error) {
           throw error
         } else {
@@ -104,12 +90,15 @@ export const createNight = async (
       startDate: startTime,
       endDate: endTime
     }
-    await AppleHealthKit.saveSleep(newNight, (error: any, response: any) => {
-      if (error) {
-        throw error
-      } else {
-        return response
+    await AppleHealthKit.saveSleep(
+      newNight,
+      (error: string, response: SleepSample[]) => {
+        if (error) {
+          throw error
+        } else {
+          return response
+        }
       }
-    })
+    )
   }
 }

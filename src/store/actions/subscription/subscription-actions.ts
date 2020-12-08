@@ -1,26 +1,21 @@
 import CONFIG from '@config/Config'
-import ReduxAction, { Dispatch, Thunk } from '@typings/redux-actions'
+import ReduxAction, { AppThunk } from '@typings/redux-actions'
 import Intercom from 'react-native-intercom'
 import Purchases, { PurchasesPackage } from 'react-native-purchases'
 import { updateIntercomInformation } from '../IntercomActions'
+import {
+  PurchaseActionTypes,
+  RESTORE_START,
+  RESTORE_SUCCESS,
+  RESTORE_FAILURE,
+  PURCHASE_SUBSCRIPTION_START,
+  PURCHASE_SUBSCRIPTION_SUCCESS,
+  PURCHASE_SUBSCRIPTION_FAILURE
+} from './types'
 
 const key = CONFIG.SUBSCRIPTION_ENTITLEMENT_KEY as string
 
-/* ACTION TYPES */
-
-export const PURCHASE_SUBSCRIPTION_START = 'PURCHASE_SUBSCRIPTION_START'
-export const PURCHASE_SUBSCRIPTION_SUCCESS = 'PURCHASE_SUBSCRIPTION_SUCCESS'
-export const PURCHASE_SUBSCRIPTION_FAILURE = 'PURCHASE_SUBSCRIPTION_FAILURE'
-
-export const RESTORE_START = 'RESTORE_START'
-export const RESTORE_SUCCESS = 'RESTORE_PURCHASE'
-export const RESTORE_FAILURE = 'RESTORE_FAILURE'
-
-export const DISABLE_COACHING = 'DISABLE_COACHING'
-
-/*  ACTIONS */
-
-export const purchaseStart = (): ReduxAction => ({
+export const purchaseStart = (): PurchaseActionTypes => ({
   type: PURCHASE_SUBSCRIPTION_START
 })
 
@@ -32,33 +27,26 @@ export const purchaseSuccess = (payload: {
   payload
 })
 
-export const purchaseFailure = (error: string): ReduxAction => ({
+export const purchaseFailure = (error: string): PurchaseActionTypes => ({
   type: PURCHASE_SUBSCRIPTION_FAILURE,
   payload: error
 })
 
-export const restoreStart = (): ReduxAction => ({
+export const restoreStart = (): PurchaseActionTypes => ({
   type: RESTORE_START
 })
 
 export const restoreSuccess = (payload: {
   isActive: boolean
   expirationDate?: string | null
-}): ReduxAction => ({
+}): PurchaseActionTypes => ({
   type: RESTORE_SUCCESS,
   payload
 })
 
-export const restoreFailure = (): ReduxAction => ({
-  type: RESTORE_FAILURE
-})
-
-export const purchaseCoachingForAWeek = (): ReduxAction => ({
-  type: RESTORE_START
-})
-
-export const disableCoaching = (): ReduxAction => ({
-  type: DISABLE_COACHING
+export const restoreFailure = (error: string): PurchaseActionTypes => ({
+  type: RESTORE_FAILURE,
+  payload: error
 })
 
 /* ASYNC ACTIONS */
@@ -67,9 +55,7 @@ export const disableCoaching = (): ReduxAction => ({
  * @async
  *  Run on every app start and updates subscription status
  */
-export const updateSubscriptionStatus = (): Thunk => async (
-  dispatch: Dispatch
-) => {
+export const updateSubscriptionStatus = (): AppThunk => async (dispatch) => {
   try {
     const {
       entitlements: { active }
@@ -89,7 +75,7 @@ export const updateSubscriptionStatus = (): Thunk => async (
       dispatch(purchaseSuccess({ isActive: false }))
     }
   } catch (error) {
-    console.warn(error)
+    dispatch(purchaseFailure(error))
   }
 }
 
@@ -99,7 +85,7 @@ export const updateSubscriptionStatus = (): Thunk => async (
  */
 export const purchaseSubscription = (
   subscription: PurchasesPackage
-): Thunk => async (dispatch: Dispatch) => {
+): AppThunk => async (dispatch) => {
   dispatch(purchaseStart())
   try {
     const { purchaserInfo } = await Purchases.purchasePackage(subscription)
@@ -129,7 +115,7 @@ export const purchaseSubscription = (
  * @async
  * Restores a user's previous purchases and enables coaching for user
  */
-export const restorePurchase = (): Thunk => async (dispatch: Dispatch) => {
+export const restorePurchase = (): AppThunk => async (dispatch) => {
   dispatch(restoreStart())
   try {
     const purchaserInfo = await Purchases.restoreTransactions()
@@ -144,6 +130,6 @@ export const restorePurchase = (): Thunk => async (dispatch: Dispatch) => {
       dispatch(restoreSuccess({ isActive: false }))
     }
   } catch (error) {
-    dispatch(restoreFailure())
+    dispatch(restoreFailure(error))
   }
 }
